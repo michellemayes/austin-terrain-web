@@ -1,0 +1,161 @@
+'use client';
+
+import { Suspense, useEffect, useRef, useState } from 'react';
+import { Canvas, useLoader, useFrame } from '@react-three/fiber';
+import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
+import * as THREE from 'three';
+
+interface TerrainViewerProps {
+  glbUrl?: string;
+  className?: string;
+}
+
+function TerrainModel({ url }: { url: string }) {
+  const meshRef = useRef<THREE.Group>(null);
+  const [error, setError] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!url) return;
+
+    console.log('[TerrainViewer] Loading GLB from:', url);
+
+    // Get texture URL (same directory as GLB)
+    const textureUrl = url.replace('terrain.glb', 'texture.png');
+    console.log('[TerrainViewer] Texture URL:', textureUrl);
+
+    // Use dynamic import for GLTFLoader
+    import('three-stdlib').then(({ GLTFLoader }) => {
+      const loader = new GLTFLoader();
+      loader.load(
+        url,
+        (gltf) => {
+          console.log('[TerrainViewer] GLB loaded successfully!');
+          
+          // Load and apply texture to the model
+          const textureLoader = new THREE.TextureLoader();
+          textureLoader.load(
+            textureUrl,
+            (texture) => {
+              console.log('[TerrainViewer] Texture loaded successfully!');
+              
+              // Apply texture to all meshes in the scene
+              gltf.scene.traverse((child) => {
+                if (child instanceof THREE.Mesh) {
+                  if (child.material instanceof THREE.MeshStandardMaterial) {
+                    child.material.map = texture;
+                    child.material.needsUpdate = true;
+                    console.log('[TerrainViewer] Texture applied to mesh');
+                  }
+                }
+              });
+              
+              if (meshRef.current) {
+                meshRef.current.add(gltf.scene);
+                setLoaded(true);
+              }
+            },
+            undefined,
+            (err) => {
+              console.warn('[TerrainViewer] Could not load texture, showing without texture:', err);
+              // Still show the model even if texture fails
+              if (meshRef.current) {
+                meshRef.current.add(gltf.scene);
+                setLoaded(true);
+              }
+            }
+          );
+        },
+        (progress) => {
+          if (progress.total > 0) {
+            console.log('[TerrainViewer] Loading progress:', 
+              (progress.loaded / progress.total * 100).toFixed(0) + '%');
+          }
+        },
+        (err) => {
+          console.error('[TerrainViewer] Error loading 3D model:', err);
+          setError(true);
+        }
+      );
+    }).catch((err) => {
+      console.error('[TerrainViewer] Error importing GLTFLoader:', err);
+      setError(true);
+    });
+  }, [url]);
+
+  // Rotate slowly for better view
+  useFrame(() => {
+    if (meshRef.current && loaded) {
+      meshRef.current.rotation.y += 0.002;
+    }
+  });
+
+  if (error) {
+    return (
+      <mesh>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial color="#ff0000" />
+      </mesh>
+    );
+  }
+
+  return <group ref={meshRef} />;
+}
+
+function LoadingBox() {
+  const meshRef = useRef<THREE.Mesh>(null);
+
+  useFrame(() => {
+    if (meshRef.current) {
+      meshRef.current.rotation.x += 0.01;
+      meshRef.current.rotation.y += 0.01;
+    }
+  });
+
+  return (
+    <mesh ref={meshRef}>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial color="#3b82f6" />
+    </mesh>
+  );
+}
+
+export default function TerrainViewer({ glbUrl, className = '' }: TerrainViewerProps) {
+  return (
+    <div className={`${className} bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg overflow-hidden relative`}>
+      <Canvas>
+        <PerspectiveCamera makeDefault position={[80, 60, 80]} fov={50} />
+        <OrbitControls 
+          enableDamping 
+          dampingFactor={0.05}
+          minDistance={50}
+          maxDistance={300}
+          target={[0, 0, 0]}
+        />
+        
+        {/* Lighting */}
+        <ambientLight intensity={0.6} />
+        <directionalLight position={[100, 100, 50]} intensity={1.2} castShadow />
+        <directionalLight position={[-50, 50, -50]} intensity={0.4} />
+        <hemisphereLight args={['#ffffff', '#444444', 0.5]} />
+        
+        <Suspense fallback={<LoadingBox />}>
+          {glbUrl ? (
+            <TerrainModel url={glbUrl} />
+          ) : (
+            <LoadingBox />
+          )}
+        </Suspense>
+      </Canvas>
+      
+      {!glbUrl && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="bg-black bg-opacity-50 text-white px-4 py-2 rounded">
+            No terrain model loaded
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+

@@ -1,0 +1,14 @@
+{
+  "functions": {
+    "app/api/generate-terrain/route.ts": {
+      "maxDuration": 300
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/terrain/:path*",
+      "destination": "/public/terrain/:path*"
+    }
+  ]
+}
+
