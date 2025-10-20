@@ -2,6 +2,14 @@
 
 Get the Austin 3D Terrain Generator running locally in under 5 minutes!
 
+## New Features ✨
+
+- **Responsive Navigation** - Easy access to Generator and Documentation pages
+- **3D Viewer Controls** - Fullscreen mode and rotation toggle
+- **Optimized WMS** - Better aerial imagery retrieval
+- **No Area Limit** - Create large terrain models
+- **In-App Documentation** - Visit `/docs` for detailed information
+
 ## Prerequisites
 
 - Node.js 18 or higher
@@ -26,7 +34,13 @@ The application will be available at [http://localhost:3000](http://localhost:30
 
 1. **Open your browser** to http://localhost:3000
 
-2. **Select an area** using one of two methods:
+2. **Navigation** - You'll see a navigation bar at the top:
+   - **Generator** - Main terrain generation tool (home page)
+   - **Documentation** - Detailed info about data sources and how it works
+   - **GitHub** - Link to repository
+   - On mobile: Click hamburger menu (☰) to access
+
+3. **Select an area** using one of two methods:
    
    **Option A: Draw on Map**
    - Click the "Draw on Map" tab (default)
@@ -45,8 +59,15 @@ The application will be available at [http://localhost:3000](http://localhost:30
    - Wait for processing (progress bar will show status)
    - Processing time: 30 seconds to 2 minutes depending on area size
 
-4. **Download Files**
-   - Preview the 3D model in the interactive viewer
+4. **View in 3D**
+   - Use the interactive viewer controls:
+     - **⏸️ Pause / ▶️ Rotate** - Toggle auto-rotation
+     - **⤢ Fullscreen** - Enter fullscreen mode
+     - **Mouse drag** - Rotate view
+     - **Scroll** - Zoom in/out
+   - The terrain shows real aerial imagery as a texture
+
+5. **Download Files**
    - Download your preferred format:
      - PNG: High-resolution snapshot
      - GLB: Interactive 3D model
@@ -226,29 +247,38 @@ If you encounter out-of-memory errors:
 ## What's Working / What's Not
 
 ### ✅ Currently Working
-- Interactive map with polygon drawing
+- Interactive map with polygon drawing (polygons persist!)
 - Coordinate input form
-- Area validation and calculation
-- API endpoint structure
-- 3D mesh generation (with test data)
-- PNG snapshot export
-- GLB model export
-- STL file export
+- Area validation (Austin bounds, no size limit)
+- **Real aerial imagery from TNRIS WMS** ✅
+- **Optimized WMS bbox calculation** ✅
+- 3D mesh generation with polygon masking
+- **Texture mapping (real imagery on terrain)** ✅
+- PNG snapshot export (aerial imagery)
+- GLB model export (with texture)
+- STL file export (3D printable)
+- **Interactive 3D viewer with:**
+  - Fullscreen mode ✅
+  - Auto-rotation toggle ✅
+  - Orbital controls ✅
 - Progress tracking UI
+- **Responsive navigation menu** ✅
+- **Documentation page at `/docs`** ✅
 
-### ⚠️ Needs Implementation
-- **DEM tile fetching from S3**: Currently uses placeholder/test elevation data
-- **DEM tile index**: Need to map coordinate bounds to specific tile files
-- **GeoTIFF parsing**: Implement proper elevation data extraction
-- **Job persistence**: Currently uses in-memory storage (lost on restart)
-- **File cleanup**: No automatic deletion of old files yet
+### ⚠️ Using Test Data
+- **DEM elevation**: Currently uses synthetic terrain (smooth sine waves)
+  - Location-specific (varies by coordinates)
+  - Not from real LiDAR data
+  - Clearly indicated in logs
+- **Everything else is real and working!**
 
-### 🔧 For Production
-- Redis/database for job storage
+### 🔧 For Full Production
+- **Real DEM pipeline**: S3 tile indexing, GeoTIFF parsing, mosaicking (~8-12 hours)
+- Job persistence (Redis/database)
 - External file storage (S3, Vercel Blob)
-- Rate limiting
-- Error monitoring
 - Automated file cleanup
+- Rate limiting
+- Error monitoring (Sentry)
 - Proper DEM data pipeline
 
 The core application structure is complete and functional. The main enhancement needed is implementing the full DEM data pipeline from TNRIS S3 buckets.
