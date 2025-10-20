@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useEffect, useRef, useState } from 'react';
-import { Canvas, useLoader, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import * as THREE from 'three';
 
@@ -10,7 +10,12 @@ interface TerrainViewerProps {
   className?: string;
 }
 
-function TerrainModel({ url }: { url: string }) {
+interface TerrainModelProps {
+  url: string;
+  autoRotate: boolean;
+}
+
+function TerrainModel({ url, autoRotate }: TerrainModelProps) {
   const meshRef = useRef<THREE.Group>(null);
   const [error, setError] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -96,9 +101,9 @@ function TerrainModel({ url }: { url: string }) {
     });
   }, [url]);
 
-  // Rotate slowly for better view
+  // Rotate slowly for better view (if enabled)
   useFrame(() => {
-    if (meshRef.current && loaded) {
+    if (meshRef.current && loaded && autoRotate) {
       meshRef.current.rotation.y += 0.002;
     }
   });
@@ -134,8 +139,62 @@ function LoadingBox() {
 }
 
 export default function TerrainViewer({ glbUrl, className = '' }: TerrainViewerProps) {
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [autoRotate, setAutoRotate] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const toggleFullscreen = () => {
+    if (!containerRef.current) return;
+
+    if (!document.fullscreenElement) {
+      containerRef.current.requestFullscreen().then(() => {
+        setIsFullscreen(true);
+      }).catch((err) => {
+        console.error('Error entering fullscreen:', err);
+      });
+    } else {
+      document.exitFullscreen().then(() => {
+        setIsFullscreen(false);
+      });
+    }
+  };
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
+
   return (
-    <div className={`${className} bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg overflow-hidden relative`}>
+    <div 
+      ref={containerRef}
+      className={`${className} bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg overflow-hidden relative`}
+    >
+      {/* Controls Overlay */}
+      <div className="absolute top-4 right-4 z-10 flex gap-2">
+        <button
+          onClick={() => setAutoRotate(!autoRotate)}
+          className={`px-4 py-2 rounded-lg font-medium transition-all shadow-lg ${
+            autoRotate 
+              ? 'bg-blue-600 text-white hover:bg-blue-700' 
+              : 'bg-white text-gray-700 hover:bg-gray-100'
+          }`}
+          title={autoRotate ? 'Stop rotation' : 'Start rotation'}
+        >
+          {autoRotate ? '⏸️ Pause' : '▶️ Rotate'}
+        </button>
+        <button
+          onClick={toggleFullscreen}
+          className="px-4 py-2 bg-white text-gray-700 rounded-lg font-medium hover:bg-gray-100 transition-all shadow-lg"
+          title={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+        >
+          {isFullscreen ? '⤓ Exit' : '⤢ Fullscreen'}
+        </button>
+      </div>
+
       <Canvas>
         <PerspectiveCamera makeDefault position={[80, 60, 80]} fov={50} />
         <OrbitControls 
@@ -154,7 +213,7 @@ export default function TerrainViewer({ glbUrl, className = '' }: TerrainViewerP
         
         <Suspense fallback={<LoadingBox />}>
           {glbUrl ? (
-            <TerrainModel url={glbUrl} />
+            <TerrainModel url={glbUrl} autoRotate={autoRotate} />
           ) : (
             <LoadingBox />
           )}
