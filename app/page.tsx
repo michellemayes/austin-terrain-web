@@ -8,6 +8,7 @@ import { downloadFile } from '@/lib/dataFetcher';
 import CoordinateForm from '@/components/CoordinateForm';
 import TerrainProgress from '@/components/TerrainProgress';
 import BasicMap from '@/components/BasicMap';
+import HelpSidebar from '@/components/HelpSidebar';
 
 const TerrainViewer = dynamic(() => import('@/components/TerrainViewer'), {
   ssr: false,
@@ -339,43 +340,10 @@ export default function Home() {
             )}
           </div>
         </div>
+      </div>
 
-        {/* Info Section */}
-        <div className="bg-gradient-to-br from-white to-gray-50 p-10 rounded-3xl shadow-2xl border border-gray-100">
-          <h2 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            How It Works
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="group hover:scale-105 transition-transform duration-200">
-              <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl w-16 h-16 flex items-center justify-center mb-4 shadow-lg shadow-blue-500/50 group-hover:shadow-xl">
-                <span className="text-white font-bold text-2xl">1</span>
-              </div>
-              <h3 className="font-bold text-xl mb-3 text-gray-900">Select Area</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Draw a polygon on the map or enter coordinates to define your area of interest
-              </p>
-            </div>
-            <div className="group hover:scale-105 transition-transform duration-200">
-              <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl w-16 h-16 flex items-center justify-center mb-4 shadow-lg shadow-green-500/50 group-hover:shadow-xl">
-                <span className="text-white font-bold text-2xl">2</span>
-              </div>
-              <h3 className="font-bold text-xl mb-3 text-gray-900">Generate</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Our system fetches high-resolution imagery and elevation data, then processes it into a 3D model
-              </p>
-            </div>
-            <div className="group hover:scale-105 transition-transform duration-200">
-              <div className="bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl w-16 h-16 flex items-center justify-center mb-4 shadow-lg shadow-purple-500/50 group-hover:shadow-xl">
-                <span className="text-white font-bold text-2xl">3</span>
-              </div>
-              <h3 className="font-bold text-xl mb-3 text-gray-900">Download</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Download your terrain as a high-res PNG, interactive GLB model, or 3D-printable STL file
-              </p>
-            </div>
-          </div>
-        </div>
-    </div>
+      {/* Help Sidebar */}
+      <HelpSidebar />
     </main>
   );
 }

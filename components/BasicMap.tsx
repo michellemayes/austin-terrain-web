@@ -12,6 +12,7 @@ interface BasicMapProps {
 export default function BasicMap({ onAreaSelected, maxAreaAcres = 1000 }: BasicMapProps) {
   const [mounted, setMounted] = useState(false);
   const [mapReady, setMapReady] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(true);
   const mapInstanceRef = useRef<any>(null);
   const drawnItemsRef = useRef<any>(null);
   const hasInitialized = useRef(false);
@@ -142,6 +143,7 @@ export default function BasicMap({ onAreaSelected, maxAreaAcres = 1000 }: BasicM
             // Handle polygon creation
             map.on(L.Draw.Event.CREATED, (event: any) => {
               console.log('[BasicMap] Polygon created!', event);
+              setShowTooltip(false); // Hide tooltip once user draws
               const layer = event.layer;
               
               // Clear previous drawings
@@ -238,6 +240,29 @@ export default function BasicMap({ onAreaSelected, maxAreaAcres = 1000 }: BasicM
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
             <p className="text-gray-600">Loading map controls...</p>
+          </div>
+        </div>
+      )}
+      
+      {/* Drawing Tools Tooltip */}
+      {mapReady && showTooltip && (
+        <div className="absolute top-4 left-4 right-4 md:right-auto md:max-w-md bg-amber-50 border-2 border-amber-300 text-amber-900 px-4 py-3 rounded-lg shadow-lg z-[1000]">
+          <div className="flex items-center gap-3">
+            <svg className="w-5 h-5 flex-shrink-0 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p className="flex-1 text-sm">
+              Use the drawing tools in the top-right corner to select your area
+            </p>
+            <button
+              onClick={() => setShowTooltip(false)}
+              className="p-1 hover:bg-amber-200 rounded transition-colors text-amber-700"
+              aria-label="Dismiss"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
         </div>
       )}
