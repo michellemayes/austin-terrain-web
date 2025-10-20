@@ -44,19 +44,26 @@ export function generateTerrainMesh(
   let insideCount = 0;
   let outsideCount = 0;
   
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      const idx = y * width + x;
-      const vertexIndex = idx * 3;
-
+  // PlaneGeometry creates vertices in specific order
+  // For a plane with widthSegments and heightSegments:
+  // vertices go from left to right, bottom to top
+  for (let iy = 0; iy <= height - 1; iy++) {
+    for (let ix = 0; ix <= width - 1; ix++) {
+      const vertexIndex = (iy * width + ix) * 3;
+      
       if (vertices[vertexIndex + 1] !== undefined) {
-        let elevation = elevationData[idx] * scale.z;
+        // Get elevation from our data array
+        const dataX = ix;
+        const dataY = iy;
+        const dataIdx = dataY * width + dataX;
+        
+        let elevation = elevationData[dataIdx] * scale.z;
 
         // If polygon is provided, check if this vertex is inside
         if (polygon && boundingBox) {
           // Map vertex position to lat/lng
-          const normalizedX = x / (width - 1);
-          const normalizedY = y / (height - 1);
+          const normalizedX = ix / (width - 1);
+          const normalizedY = iy / (height - 1);
           const lng = boundingBox.minLng + normalizedX * (boundingBox.maxLng - boundingBox.minLng);
           const lat = boundingBox.minLat + normalizedY * (boundingBox.maxLat - boundingBox.minLat);
           
@@ -83,9 +90,12 @@ export function generateTerrainMesh(
 
   geometry.attributes.position.needsUpdate = true;
   geometry.computeVertexNormals();
+  
+  // PlaneGeometry already has UVs, just ensure they're correct
+  console.log('[TerrainProcessor] UV coordinates already exist from PlaneGeometry');
 
   const material = new THREE.MeshStandardMaterial({
-    color: 0x88cc88,
+    color: 0xffffff, // White so texture shows through at full brightness
     wireframe: false,
     side: THREE.DoubleSide,
   });
@@ -348,27 +358,46 @@ export async function sampleElevationFromGeoTIFF(
   height: number
 ): Promise<Float32Array> {
   // This would use the geotiff library to read and sample the data
-  // For now, return a placeholder with more realistic terrain
+  // For now, return a placeholder with location-based terrain
+  console.log('[TerrainProcessor] Generating elevation data for bbox:', bbox);
+  
   const elevationData = new Float32Array(width * height);
   
-  // Generate realistic-looking terrain for testing
-  // Combine multiple sine waves at different frequencies for natural look
+  // Use bbox coordinates as seed for different terrain in different locations
+  const seedLat = Math.floor(bbox.minLat * 1000);
+  const seedLng = Math.floor(bbox.minLng * 1000);
+  const seed = seedLat + seedLng;
+  
+  console.log('[TerrainProcessor] Using seed:', seed, 'for location-specific terrain');
+  console.log('[TerrainProcessor] ⚠️  NOTE: Using TEST ELEVATION DATA (not real DEM)');
+  
+  // Generate NEARLY FLAT terrain with minimal variation
+  // This is placeholder data - real DEM implementation pending
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
       const idx = y * width + x;
       
-      // Combine multiple frequencies for more natural terrain
-      const freq1 = Math.sin(x / 20) * Math.cos(y / 20) * 2;
-      const freq2 = Math.sin(x / 10) * Math.cos(y / 10) * 1;
-      const freq3 = Math.sin(x / 5) * Math.cos(y / 5) * 0.5;
+      // Use seed for location-specific variation
+      const offset = seed / 5000;
       
-      // Add gentle slope
-      const slope = (x / width) * 0.5;
+      // Extremely subtle terrain - almost completely flat
+      const freq1 = Math.sin((x + offset) / 100) * Math.cos((y + offset) / 100) * 0.15;
+      const freq2 = Math.sin((x + offset * 2) / 80) * Math.cos((y + offset * 2) / 80) * 0.08;
       
-      // Combine all for natural-looking terrain (values 0-4)
-      elevationData[idx] = freq1 + freq2 + freq3 + slope + 1;
+      // Tiny noise for minimal texture
+      const noise = Math.sin((x * y + seed) / 600) * 0.03;
+      
+      // Almost no slope
+      const slope = (x / width) * 0.05;
+      
+      // Nearly flat terrain (values ~0.95-1.3, very subtle)
+      elevationData[idx] = freq1 + freq2 + noise + slope + 1.0;
     }
   }
+  
+  console.log('[TerrainProcessor] Elevation data generated, min/max values:', 
+    Math.min(...elevationData).toFixed(2), '/', 
+    Math.max(...elevationData).toFixed(2));
   
   return elevationData;
 }

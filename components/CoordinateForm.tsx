@@ -11,7 +11,7 @@ interface CoordinateFormProps {
 
 export default function CoordinateForm({ 
   onCoordinatesSubmit, 
-  maxAreaAcres = 10 
+  maxAreaAcres = 1000 
 }: CoordinateFormProps) {
   const [coordinateText, setCoordinateText] = useState('');
   const [error, setError] = useState('');
@@ -105,9 +105,9 @@ export default function CoordinateForm({
       <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md text-sm text-blue-800">
         <p className="font-medium mb-1">Tips:</p>
         <ul className="list-disc list-inside space-y-1">
-          <li>Maximum area: {maxAreaAcres} acres</li>
           <li>Coordinates must be within Austin area</li>
           <li>Use decimal degrees format</li>
+          <li>At least 3 coordinates required</li>
         </ul>
       </div>
     </div>

@@ -16,6 +16,9 @@ import path from 'path';
 // In-memory job storage (in production, use Redis or database)
 const jobs = new Map<string, TerrainJobStatus>();
 
+// S3 DEM data location
+const S3_DEM_BASE = 'https://tnris-data-warehouse.s3.us-east-1.amazonaws.com/LCD/collection/stratmap-2021-28cm-50cm-bexar-travis/dem/';
+
 export async function POST(request: NextRequest) {
   try {
     const body: TerrainRequest = await request.json();
@@ -29,9 +32,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (areaAcres > 10) {
+    if (areaAcres > 1000) {
       return NextResponse.json(
-        { error: 'Area exceeds maximum of 10 acres' },
+        { error: 'Area exceeds maximum of 1000 acres' },
         { status: 400 }
       );
     }
@@ -117,16 +120,30 @@ async function processTerrainGeneration(
     const imageryBuffer = await imageryBlob.arrayBuffer();
 
     // For DEM data, we'll use placeholder data for now
-    // In production, this would fetch and process actual DEM tiles
+    // In production, this would fetch and process actual DEM tiles from S3
     updateProgress(40, 'Fetching elevation data...');
+    console.log('[API] ═══════════════════════════════════════════════════════');
+    console.log('[API] DEM DATA PLACEHOLDER - NOT FROM S3 YET');
+    console.log('[API] ═══════════════════════════════════════════════════════');
+    console.log('[API] Real implementation would:');
+    console.log('[API]   1. Query S3 bucket for available DEM tiles');
+    console.log('[API]   2. Identify which tiles cover bbox:', bbox);
+    console.log('[API]   3. Download tiles from:', S3_DEM_BASE);
+    console.log('[API]   4. Parse GeoTIFF elevation data');
+    console.log('[API]   5. Mosaic and crop to exact area');
+    console.log('[API] ═══════════════════════════════════════════════════════');
+    console.log('[API] Currently generating SYNTHETIC test elevation data...');
+    
     const width = 128;
     const height = 128;
     const elevationData = await sampleElevationFromGeoTIFF(
-      new ArrayBuffer(0), // Placeholder
+      new ArrayBuffer(0), // Placeholder - no real data
       bbox,
       width,
       height
     );
+    
+    console.log('[API] Test elevation data generated:', width, 'x', height, 'vertices');
 
     // Generate 3D mesh
     updateProgress(60, 'Generating 3D terrain mesh...');
@@ -137,7 +154,7 @@ async function processTerrainGeneration(
       {
         x: 1,
         y: 1,
-        z: 3, // Scale elevation for visibility (will be adjusted based on real DEM data)
+        z: 5, // Increased to make subtle elevation visible
       },
       coordinates, // Pass polygon coordinates
       bbox // Pass bounding box
@@ -152,8 +169,10 @@ async function processTerrainGeneration(
 
     // Save the aerial imagery as the snapshot PNG
     updateProgress(75, 'Saving aerial imagery...');
-    fs.writeFileSync(path.join(outputDir, 'snapshot.png'), Buffer.from(imageryBuffer));
-    fs.writeFileSync(path.join(outputDir, 'texture.png'), Buffer.from(imageryBuffer));
+    const imageryBufferData = Buffer.from(imageryBuffer);
+    fs.writeFileSync(path.join(outputDir, 'snapshot.png'), imageryBufferData);
+    fs.writeFileSync(path.join(outputDir, 'texture.png'), imageryBufferData);
+    console.log('[API] Saved texture.png:', imageryBufferData.length, 'bytes to', path.join(outputDir, 'texture.png'));
 
     // Apply texture to mesh
     updateProgress(80, 'Applying aerial imagery texture...');

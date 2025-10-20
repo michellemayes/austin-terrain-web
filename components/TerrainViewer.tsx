@@ -38,17 +38,30 @@ function TerrainModel({ url }: { url: string }) {
             textureUrl,
             (texture) => {
               console.log('[TerrainViewer] Texture loaded successfully!');
+              console.log('[TerrainViewer] Texture size:', texture.image?.width, 'x', texture.image?.height);
+              console.log('[TerrainViewer] Texture image src:', texture.image?.src?.substring(0, 100));
+              
+              // Configure texture for proper display
+                texture.wrapS = THREE.ClampToEdgeWrapping;
+                texture.wrapT = THREE.ClampToEdgeWrapping;
+                texture.flipY = true; // Flip Y to match terrain orientation
+                texture.needsUpdate = true;
               
               // Apply texture to all meshes in the scene
-              gltf.scene.traverse((child) => {
-                if (child instanceof THREE.Mesh) {
-                  if (child.material instanceof THREE.MeshStandardMaterial) {
-                    child.material.map = texture;
-                    child.material.needsUpdate = true;
-                    console.log('[TerrainViewer] Texture applied to mesh');
+                gltf.scene.traverse((child) => {
+                  if (child instanceof THREE.Mesh) {
+                    if (child.material instanceof THREE.MeshStandardMaterial) {
+                      // Set material properties for proper texture display
+                      child.material.map = texture;
+                      child.material.color.set(0xffffff); // White to show texture at full brightness
+                      child.material.metalness = 0; // No metallic effect
+                      child.material.roughness = 1; // Full roughness for matte appearance
+                      child.material.transparent = false; // No transparency
+                      child.material.needsUpdate = true;
+                      console.log('[TerrainViewer] Texture applied to mesh with proper settings');
+                    }
                   }
-                }
-              });
+                });
               
               if (meshRef.current) {
                 meshRef.current.add(gltf.scene);

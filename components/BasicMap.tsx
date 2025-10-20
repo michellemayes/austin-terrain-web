@@ -9,7 +9,7 @@ interface BasicMapProps {
   maxAreaAcres?: number;
 }
 
-export default function BasicMap({ onAreaSelected, maxAreaAcres = 10 }: BasicMapProps) {
+export default function BasicMap({ onAreaSelected, maxAreaAcres = 1000 }: BasicMapProps) {
   const [mounted, setMounted] = useState(false);
   const [mapReady, setMapReady] = useState(false);
   const mapInstanceRef = useRef<any>(null);

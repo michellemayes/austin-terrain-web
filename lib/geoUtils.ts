@@ -60,6 +60,11 @@ export function isInAustinArea(coordinate: Coordinate): boolean {
 }
 
 /**
+ * Maximum area limit in acres (set to a very large number to effectively disable)
+ */
+export const MAX_AREA_ACRES = 1000;
+
+/**
  * Check if all coordinates are within Austin area
  */
 export function areAllInAustinArea(coordinates: Coordinate[]): boolean {

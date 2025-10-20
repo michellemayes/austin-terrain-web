@@ -177,9 +177,9 @@ export default function Home() {
               </div>
 
               {inputMethod === 'map' ? (
-                <BasicMap onAreaSelected={handleAreaSelected} maxAreaAcres={10} />
+                <BasicMap onAreaSelected={handleAreaSelected} maxAreaAcres={1000} />
               ) : (
-                <CoordinateForm onCoordinatesSubmit={handleAreaSelected} maxAreaAcres={10} />
+                <CoordinateForm onCoordinatesSubmit={handleAreaSelected} maxAreaAcres={1000} />
               )}
             </div>
 
@@ -324,7 +324,7 @@ export default function Home() {
               </div>
               <h3 className="font-bold text-xl mb-3 text-gray-900">Select Area</h3>
               <p className="text-gray-600 leading-relaxed">
-                Draw a polygon on the map or enter coordinates to define your area of interest (max 10 acres)
+                Draw a polygon on the map or enter coordinates to define your area of interest
               </p>
             </div>
             <div className="group hover:scale-105 transition-transform duration-200">
