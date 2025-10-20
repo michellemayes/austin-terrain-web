@@ -94,12 +94,32 @@ export default function BasicMap({ onAreaSelected, maxAreaAcres = 1000 }: BasicM
             mapInstanceRef.current = map;
             console.log('[BasicMap] Map created!');
             
-            // Add tiles
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-              maxZoom: 19,
-              attribution: '© OpenStreetMap'
-            }).addTo(map);
-            console.log('[BasicMap] Tiles added!');
+            // Define base layers
+            const baseLayers = {
+              'Street Map': L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap'
+              }),
+              'Satellite': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                maxZoom: 19,
+                attribution: 'Esri, Maxar, Earthstar Geographics'
+              }),
+              'Terrain': L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+                maxZoom: 17,
+                attribution: '© OpenTopoMap'
+              }),
+              'Gray': L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                maxZoom: 19,
+                attribution: '© CARTO'
+              })
+            };
+            
+            // Add default layer
+            baseLayers['Street Map'].addTo(map);
+            
+            // Add layer control in bottom-right
+            L.control.layers(baseLayers, null, { position: 'bottomright' }).addTo(map);
+            console.log('[BasicMap] Tiles and layer control added!');
 
             // Create feature group for drawn items
             const drawnItems = new L.FeatureGroup();
