@@ -156,23 +156,30 @@ export default function Home() {
               <div className="flex gap-3 mb-6">
                 <button
                   onClick={() => setInputMethod('map')}
-                  className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all ${
+                  className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 ${
                     inputMethod === 'map'
                       ? 'bg-blue-600 text-white shadow-lg'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  🗺️ Draw on Map
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                  </svg>
+                  Draw on Map
                 </button>
                 <button
                   onClick={() => setInputMethod('form')}
-                  className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all ${
+                  className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 ${
                     inputMethod === 'form'
                       ? 'bg-blue-600 text-white shadow-lg'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  📍 Enter Coordinates
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  Enter Coordinates
                 </button>
               </div>
 
@@ -188,13 +195,18 @@ export default function Home() {
               <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-2xl shadow-xl border border-green-100">
                 <div className="mb-6 space-y-2">
                   <div className="flex items-center gap-2">
-                    <span className="text-2xl">📐</span>
+                    <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                    </svg>
                     <p className="text-gray-700">
                       Selected Area: <span className="font-bold text-green-700">{areaAcres.toFixed(2)} acres</span>
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-2xl">📍</span>
+                    <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
                     <p className="text-gray-700">
                       Coordinates: <span className="font-bold text-green-700">{selectedCoordinates.length} points</span>
                     </p>
@@ -203,13 +215,27 @@ export default function Home() {
                 <button
                   onClick={handleGenerateTerrain}
                   disabled={isGenerating}
-                  className={`w-full py-4 px-8 rounded-xl font-bold text-lg text-white transition-all duration-200 ${
+                  className={`w-full py-4 px-8 rounded-xl font-bold text-lg text-white transition-all duration-200 flex items-center justify-center gap-2 ${
                     isGenerating
                       ? 'bg-gray-400 cursor-not-allowed'
                       : 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-lg shadow-green-500/50 hover:shadow-xl hover:scale-105'
                   }`}
                 >
-                  {isGenerating ? '⚙️ Generating...' : '🚀 Generate 3D Terrain'}
+                  {isGenerating ? (
+                    <>
+                      <svg className="w-6 h-6 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                      </svg>
+                      Generating...
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                      Generate 3D Terrain
+                    </>
+                  )}
                 </button>
               </div>
             )}
@@ -302,10 +328,12 @@ export default function Home() {
 
             {!jobStatus && (
               <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-10 rounded-2xl shadow-xl border border-blue-100 h-full flex flex-col items-center justify-center">
-                <div className="text-6xl mb-4">🏔️</div>
+                <svg className="w-24 h-24 text-blue-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                </svg>
                 <h3 className="text-2xl font-bold mb-3 text-gray-900">Preview</h3>
                 <p className="text-gray-600 text-center">
-                  Your 3D terrain preview will appear here after generation
+                  Your 3D terrain model will appear here after generation.
                 </p>
               </div>
             )}

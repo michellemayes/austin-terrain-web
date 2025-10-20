@@ -42,9 +42,9 @@ export default function DocsPage() {
                 of 0.35 meters per pixel, ensuring reliable imagery retrieval.
               </p>
               <p className="text-sm text-gray-600 italic">
-                Source: <a href="https://imagery.geographic.texas.gov/server/services/StratMap/StratMap21_NCCIR_CapArea_Brazos_Kerr/ImageServer/WMSServer" 
+                Source: <a href="https://data.geographic.texas.gov/collection/?c=3e1530dc-d5be-4683-811b-9d4b162f0aa9" 
                 className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
-                  TNRIS StratMap21 NC-CIR CapArea Brazos Kerr ImageServer
+                  Strategic Mapping Program (StratMap). CapArea, Brazos & Kerr Imagery, 2021-01-17. Web. 2025-10-19.
                 </a>
               </p>
             </div>
@@ -52,8 +52,13 @@ export default function DocsPage() {
             <div>
               <h3 className="text-xl font-semibold text-blue-600 mb-2">3. Elevation Data (Test Mode)</h3>
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-3">
-                <p className="text-sm font-medium text-yellow-800 mb-1">⚠️ Current Status: Test Data</p>
-                <p className="text-sm text-yellow-700">
+                <div className="flex items-start gap-2 mb-1">
+                  <svg className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  <p className="text-sm font-medium text-yellow-800">Current Status: Test Data</p>
+                </div>
+                <p className="text-sm text-yellow-700 ml-7">
                   The application currently uses synthetic elevation data (procedurally generated terrain). 
                   Real DEM (Digital Elevation Model) data from TNRIS is not yet implemented.
                 </p>
@@ -299,7 +304,7 @@ export default function DocsPage() {
             <div className="pt-4 border-t border-gray-200">
               <h3 className="font-semibold text-gray-900 mb-2">Inspiration</h3>
               <p className="text-gray-700 leading-relaxed">
-                This web application was inspired by an original R script using the rayshader package, 
+                This web application was inspired by an original R script by Michelle Mayes using the rayshader package, 
                 which demonstrated how to create beautiful 3D terrain visualizations from Austin-area 
                 geospatial data.
               </p>
