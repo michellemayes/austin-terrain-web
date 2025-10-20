@@ -263,7 +263,7 @@ export default function Home() {
                 {/* 3D Viewer */}
                 <div className="bg-white p-6 rounded-lg shadow-lg">
                   <h3 className="text-xl font-semibold mb-4">3D Preview</h3>
-                  <TerrainViewer glbUrl={jobStatus.files.glb} className="h-[400px] w-full" />
+                  <TerrainViewer glbUrl={jobStatus.files.glb} className="h-[500px] w-full" />
                 </div>
 
                 {/* Download Section */}

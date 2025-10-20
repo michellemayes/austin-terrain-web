@@ -4,6 +4,13 @@ import { useState } from 'react';
 
 export default function HelpSidebar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const copyToClipboard = (text: string, id: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
 
   return (
     <>
@@ -16,9 +23,6 @@ export default function HelpSidebar() {
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-          ?
-        </span>
       </button>
 
       {/* Overlay */}
@@ -144,7 +148,22 @@ export default function HelpSidebar() {
             <div className="space-y-3">
               <div>
                 <p className="text-sm font-semibold text-gray-700 mb-1">Downtown Austin</p>
-                <div className="bg-gray-100 p-2 rounded font-mono text-xs text-gray-800">
+                <div className="relative bg-gray-100 p-2 rounded font-mono text-xs text-gray-800">
+                  <button
+                    onClick={() => copyToClipboard('30.2672, -97.7431\n30.2680, -97.7431\n30.2680, -97.7420\n30.2672, -97.7420', 'downtown')}
+                    className="absolute top-2 right-2 p-1 hover:bg-gray-200 rounded transition-colors"
+                    title="Copy to clipboard"
+                  >
+                    {copiedId === 'downtown' ? (
+                      <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : (
+                      <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                    )}
+                  </button>
                   30.2672, -97.7431<br />
                   30.2680, -97.7431<br />
                   30.2680, -97.7420<br />
@@ -154,7 +173,22 @@ export default function HelpSidebar() {
 
               <div>
                 <p className="text-sm font-semibold text-gray-700 mb-1">Texas State Capitol</p>
-                <div className="bg-gray-100 p-2 rounded font-mono text-xs text-gray-800">
+                <div className="relative bg-gray-100 p-2 rounded font-mono text-xs text-gray-800">
+                  <button
+                    onClick={() => copyToClipboard('30.2747, -97.7403\n30.2755, -97.7403\n30.2755, -97.7390\n30.2747, -97.7390', 'capitol')}
+                    className="absolute top-2 right-2 p-1 hover:bg-gray-200 rounded transition-colors"
+                    title="Copy to clipboard"
+                  >
+                    {copiedId === 'capitol' ? (
+                      <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : (
+                      <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                    )}
+                  </button>
                   30.2747, -97.7403<br />
                   30.2755, -97.7403<br />
                   30.2755, -97.7390<br />

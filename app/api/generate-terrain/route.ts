@@ -111,17 +111,17 @@ async function processTerrainGeneration(
 
   try {
     // Calculate bounding box
-    updateProgress(10, 'Calculating bounding box...');
+    updateProgress(10, 'Calculating area...');
     const bbox = calculateBoundingBox(coordinates);
 
     // Fetch imagery from WMS
-    updateProgress(20, 'Fetching aerial imagery...');
+    updateProgress(20, 'Getting imagery...');
     const imageryBlob = await fetchImageryFromWMS(bbox, 1024, 1024);
     const imageryBuffer = await imageryBlob.arrayBuffer();
 
     // For DEM data, we'll use placeholder data for now
     // In production, this would fetch and process actual DEM tiles from S3
-    updateProgress(40, 'Fetching elevation data...');
+    updateProgress(40, 'Getting DEM data...');
     console.log('[API] ═══════════════════════════════════════════════════════');
     console.log('[API] DEM DATA PLACEHOLDER - NOT FROM S3 YET');
     console.log('[API] ═══════════════════════════════════════════════════════');
@@ -146,7 +146,7 @@ async function processTerrainGeneration(
     console.log('[API] Test elevation data generated:', width, 'x', height, 'vertices');
 
     // Generate 3D mesh
-    updateProgress(60, 'Generating 3D terrain mesh...');
+    updateProgress(60, 'Building 3D mesh...');
     const mesh = generateTerrainMesh(
       elevationData, 
       width, 
@@ -161,21 +161,21 @@ async function processTerrainGeneration(
     );
 
     // Create output directory
-    updateProgress(70, 'Creating output directory...');
+    updateProgress(70, 'Preparing files...');
     const outputDir = path.join(process.cwd(), 'public', 'terrain', jobId);
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
     }
 
     // Save the aerial imagery as the snapshot PNG
-    updateProgress(75, 'Saving aerial imagery...');
+    updateProgress(75, 'Saving imagery...');
     const imageryBufferData = Buffer.from(imageryBuffer);
     fs.writeFileSync(path.join(outputDir, 'snapshot.png'), imageryBufferData);
     fs.writeFileSync(path.join(outputDir, 'texture.png'), imageryBufferData);
     console.log('[API] Saved texture.png:', imageryBufferData.length, 'bytes to', path.join(outputDir, 'texture.png'));
 
     // Apply texture to mesh
-    updateProgress(80, 'Applying aerial imagery texture...');
+    updateProgress(80, 'Applying texture...');
     console.log('[API] Starting texture application...');
     console.log('[API] Imagery buffer size:', imageryBuffer.byteLength, 'bytes');
     
@@ -231,7 +231,7 @@ async function processTerrainGeneration(
     }
     
     // Generate GLB file
-    updateProgress(85, 'Exporting GLB model...');
+    updateProgress(85, 'Exporting GLB...');
     const glbBuffer = await exportToGLB(mesh);
     fs.writeFileSync(path.join(outputDir, 'terrain.glb'), Buffer.from(glbBuffer));
     
@@ -242,7 +242,7 @@ async function processTerrainGeneration(
     }
 
     // Generate STL file (with base)
-    updateProgress(90, 'Exporting STL file...');
+    updateProgress(90, 'Exporting STL...');
     const stlData = exportToSTL(mesh, true);
     fs.writeFileSync(path.join(outputDir, 'terrain.stl'), stlData);
 

@@ -81,7 +81,10 @@ export default function CoordinateForm({
             value={coordinateText}
             onChange={(e) => setCoordinateText(e.target.value)}
             className="w-full h-40 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm"
-            placeholder="30.2672, -97.7431&#10;30.2673, -97.7430&#10;30.2671, -97.7429&#10;30.2670, -97.7432"
+            placeholder={`30.2672, -97.7431
+30.2673, -97.7430
+30.2671, -97.7429
+30.2670, -97.7432`}
           />
           <p className="text-xs text-gray-500 mt-1">
             Enter at least 3 coordinates to define a polygon. Format: lat, lng (one per line)
