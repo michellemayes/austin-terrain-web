@@ -225,7 +225,7 @@ export default function TerrainViewer({ glbUrl, className = '' }: TerrainViewerP
       </div>
 
       <Canvas>
-        <PerspectiveCamera makeDefault position={[80, 60, 80]} fov={50} />
+        <PerspectiveCamera makeDefault position={[80, 60, 80]} fov={50} zoom={0.55} />
         <OrbitControls 
           enableDamping 
           dampingFactor={0.05}

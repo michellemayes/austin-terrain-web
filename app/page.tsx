@@ -340,7 +340,7 @@ export default function Home() {
             )}
           </div>
         </div>
-      </div>
+    </div>
 
       {/* Help Sidebar */}
       <HelpSidebar />

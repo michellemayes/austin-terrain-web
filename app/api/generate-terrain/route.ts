@@ -2,7 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 import { TerrainRequest, TerrainJobStatus } from '@/types';
 import { calculateBoundingBox } from '@/lib/geoUtils';
-import { fetchImageryFromWMS } from '@/lib/dataFetcher';
+import { 
+  fetchImageryFromWMS, 
+  listDEMTilesFromS3, 
+  filterTilesByBoundingBox,
+  downloadMultipleDEMTiles 
+} from '@/lib/dataFetcher';
 import * as THREE from 'three';
 import { 
   generateTerrainMesh, 
@@ -15,9 +20,6 @@ import path from 'path';
 
 // In-memory job storage (in production, use Redis or database)
 const jobs = new Map<string, TerrainJobStatus>();
-
-// S3 DEM data location
-const S3_DEM_BASE = 'https://tnris-data-warehouse.s3.us-east-1.amazonaws.com/LCD/collection/stratmap-2021-28cm-50cm-bexar-travis/dem/';
 
 export async function POST(request: NextRequest) {
   try {
@@ -119,31 +121,40 @@ async function processTerrainGeneration(
     const imageryBlob = await fetchImageryFromWMS(bbox, 1024, 1024);
     const imageryBuffer = await imageryBlob.arrayBuffer();
 
-    // For DEM data, we'll use placeholder data for now
-    // In production, this would fetch and process actual DEM tiles from S3
-    updateProgress(40, 'Getting DEM data...');
-    console.log('[API] ═══════════════════════════════════════════════════════');
-    console.log('[API] DEM DATA PLACEHOLDER - NOT FROM S3 YET');
-    console.log('[API] ═══════════════════════════════════════════════════════');
-    console.log('[API] Real implementation would:');
-    console.log('[API]   1. Query S3 bucket for available DEM tiles');
-    console.log('[API]   2. Identify which tiles cover bbox:', bbox);
-    console.log('[API]   3. Download tiles from:', S3_DEM_BASE);
-    console.log('[API]   4. Parse GeoTIFF elevation data');
-    console.log('[API]   5. Mosaic and crop to exact area');
-    console.log('[API] ═══════════════════════════════════════════════════════');
-    console.log('[API] Currently generating SYNTHETIC test elevation data...');
+    // Fetch real DEM data from S3
+    updateProgress(30, 'Finding DEM tiles...');
+    console.log('[API] Listing available DEM tiles from S3...');
     
+    const allTiles = await listDEMTilesFromS3(bbox);
+    console.log(`[API] Found ${allTiles.length} total DEM tiles in S3`);
+    
+    // Filter to only tiles that overlap with our bbox
+    updateProgress(35, 'Filtering tiles...');
+    const relevantTiles = filterTilesByBoundingBox(allTiles, bbox);
+    console.log(`[API] Filtered to ${relevantTiles.length} relevant tiles for bbox`);
+    
+    if (relevantTiles.length === 0) {
+      throw new Error('No DEM tiles found for this area. The selected location may be outside the coverage area.');
+    }
+    
+    // Download DEM tiles from S3
+    updateProgress(40, 'Downloading DEM tiles...');
+    console.log('[API] Downloading', relevantTiles.length, 'DEM tile(s)...');
+    const tileBuffers = await downloadMultipleDEMTiles(relevantTiles, 3); // 3 concurrent downloads
+    console.log(`[API] Successfully downloaded ${tileBuffers.length} DEM tile(s)`);
+    
+    // Process elevation data from GeoTIFF tiles
+    updateProgress(50, 'Processing elevation data...');
     const width = 128;
     const height = 128;
     const elevationData = await sampleElevationFromGeoTIFF(
-      new ArrayBuffer(0), // Placeholder - no real data
+      tileBuffers,
       bbox,
       width,
       height
     );
     
-    console.log('[API] Test elevation data generated:', width, 'x', height, 'vertices');
+    console.log('[API] ✅ Real DEM elevation data processed:', width, 'x', height, 'vertices');
 
     // Generate 3D mesh
     updateProgress(60, 'Building 3D mesh...');
@@ -154,7 +165,7 @@ async function processTerrainGeneration(
       {
         x: 1,
         y: 1,
-        z: 5, // Increased to make subtle elevation visible
+        z: 2, // Moderate z-scale for natural terrain appearance (2x vertical exaggeration)
       },
       coordinates, // Pass polygon coordinates
       bbox // Pass bounding box

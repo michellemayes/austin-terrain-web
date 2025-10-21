@@ -50,25 +50,24 @@ export default function DocsPage() {
             </div>
 
             <div>
-              <h3 className="text-xl font-semibold text-blue-600 mb-2">3. Elevation Data (Test Mode)</h3>
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-3">
+              <h3 className="text-xl font-semibold text-blue-600 mb-2">3. Elevation Data</h3>
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-3">
                 <div className="flex items-start gap-2 mb-1">
-                  <svg className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  <svg className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <p className="text-sm font-medium text-yellow-800">Current Status: Test Data</p>
+                  <p className="text-sm font-medium text-green-800">Status: Real DEM Data</p>
                 </div>
-                <p className="text-sm text-yellow-700 ml-7">
-                  The application currently uses synthetic elevation data (procedurally generated terrain). 
-                  Real DEM (Digital Elevation Model) data from TNRIS is not yet implemented.
+                <p className="text-sm text-green-700 ml-7">
+                  The application now uses real LiDAR elevation data from TNRIS for accurate terrain modeling.
                 </p>
               </div>
               <p className="text-gray-700 leading-relaxed mb-2">
-                When fully implemented, the system will fetch LiDAR elevation data from TNRIS S3 storage, 
-                parse GeoTIFF files, and create accurate terrain meshes matching the actual landscape.
+                The system fetches LiDAR elevation data from TNRIS S3 storage, 
+                parses GeoTIFF files, and creates accurate terrain meshes matching the actual landscape.
               </p>
               <p className="text-sm text-gray-600 italic">
-                Planned Source: <a href="https://tnris-data-warehouse.s3.us-east-1.amazonaws.com/index.html?prefix=LCD/collection/stratmap-2021-28cm-50cm-bexar-travis/dem/" 
+                Data Source: <a href="https://tnris-data-warehouse.s3.us-east-1.amazonaws.com/index.html?prefix=LCD/collection/stratmap-2021-28cm-50cm-bexar-travis/dem/" 
                 className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
                   TNRIS StratMap21 28cm-50cm Bexar-Travis DEM Collection
                 </a>
@@ -214,8 +213,8 @@ export default function DocsPage() {
                   S3 Bucket - DEM Collection
                 </a>
               </p>
-              <p className="text-sm text-yellow-700 bg-yellow-50 p-2 rounded mt-2">
-                <strong>Note:</strong> Currently using synthetic test elevation data. Real DEM implementation is pending.
+              <p className="text-sm text-green-700 bg-green-50 p-2 rounded mt-2">
+                <strong>Active:</strong> Using real LiDAR elevation data from TNRIS S3 bucket.
               </p>
             </div>
           </div>

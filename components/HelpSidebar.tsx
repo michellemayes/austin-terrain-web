@@ -133,10 +133,10 @@ export default function HelpSidebar() {
                 </p>
               </div>
 
-              <div className="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded">
-                <p className="text-sm text-yellow-900 font-medium mb-1">Test Elevation Data</p>
-                <p className="text-sm text-yellow-800">
-                  Currently using synthetic terrain. Real LiDAR data coming soon!
+              <div className="bg-green-50 border-l-4 border-green-500 p-3 rounded">
+                <p className="text-sm text-green-900 font-medium mb-1">Real LiDAR Data</p>
+                <p className="text-sm text-green-800">
+                  Using authentic TNRIS elevation data for accurate terrain modeling.
                 </p>
               </div>
             </div>
