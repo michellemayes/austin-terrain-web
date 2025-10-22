@@ -165,7 +165,7 @@ async function processTerrainGeneration(
       {
         x: 1,
         y: 1,
-        z: 2, // Moderate z-scale for natural terrain appearance (2x vertical exaggeration)
+        z: 1, // Moderate z-scale for natural terrain appearance (2x vertical exaggeration)
       },
       coordinates, // Pass polygon coordinates
       bbox // Pass bounding box

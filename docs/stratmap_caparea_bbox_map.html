@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_b100fa63fd31b2d188028c1a978793d6 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+            </style>
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_b100fa63fd31b2d188028c1a978793d6" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_b100fa63fd31b2d188028c1a978793d6 = L.map(
+                "map_b100fa63fd31b2d188028c1a978793d6",
+                {
+                    center: [30.335966499999998, -97.78092699999999],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 9,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+            L.control.scale().addTo(map_b100fa63fd31b2d188028c1a978793d6);
+
+            
+
+        
+    
+            var tile_layer_faf9782b51724108db9f33405d6d8304 = L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_b100fa63fd31b2d188028c1a978793d6);
+        
+    
+            map_b100fa63fd31b2d188028c1a978793d6.fitBounds(
+                [[29.623915, -99.547921], [31.048018, -96.013933]],
+                {}
+            );
+        
+    
+            var rectangle_8e237a8900a9721f111ec932285061d4 = L.rectangle(
+                [[29.623915, -99.547921], [31.048018, -96.013933]],
+                {"bubblingMouseEvents": true, "color": "#3388ff", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#3388ff", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b100fa63fd31b2d188028c1a978793d6);
+        
+    
+            rectangle_8e237a8900a9721f111ec932285061d4.bindTooltip(
+                `<div>
+                     Advertised Bounding Box (EPSG:4326)
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_7be5d2f141a8b045994b8aa8fd8ca1c1 = L.marker(
+                [30.312199601090867, -97.73324847221376],
+                {}
+            ).addTo(map_b100fa63fd31b2d188028c1a978793d6);
+        
+    
+            marker_7be5d2f141a8b045994b8aa8fd8ca1c1.bindTooltip(
+                `<div>
+                     WORKING BBOX center
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_ef970fce3bb699baa47d4213a501e8d8 = L.marker(
+                [30.52411290367389, -97.96709954738618],
+                {}
+            ).addTo(map_b100fa63fd31b2d188028c1a978793d6);
+        
+    
+            marker_ef970fce3bb699baa47d4213a501e8d8.bindTooltip(
+                `<div>
+                     NOT-WORKING BBOX center
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_9045f12525f40ffc30384057587090b6 = L.marker(
+                [30.2672, -97.7431],
+                {}
+            ).addTo(map_b100fa63fd31b2d188028c1a978793d6);
+        
+    
+            marker_9045f12525f40ffc30384057587090b6.bindTooltip(
+                `<div>
+                     Austin (approx)
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var macro_element_5200e34680533ec83e9d0b1fb343b0e5 = L.tileLayer.wms(
+                "https://imagery.geographic.texas.gov/server/services/StratMap/StratMap21_NCCIR_CapArea_Brazos_Kerr/ImageServer/WMSServer",
+                {"attribution": "", "format": "image/png", "layers": "StratMap21_NCCIR_CapArea_Brazos_Kerr", "styles": "", "transparent": true, "version": "1.1.1"}
+            ).addTo(map_b100fa63fd31b2d188028c1a978793d6);
+        
+    
+            var layer_control_e76fb7858bd84240aea18e997f98dad0 = {
+                base_layers : {
+                    "openstreetmap" : tile_layer_faf9782b51724108db9f33405d6d8304,
+                },
+                overlays :  {
+                    "StratMap21 CapArea/Brazos/Kerr (WMS)" : macro_element_5200e34680533ec83e9d0b1fb343b0e5,
+                },
+            };
+            L.control.layers(
+                layer_control_e76fb7858bd84240aea18e997f98dad0.base_layers,
+                layer_control_e76fb7858bd84240aea18e997f98dad0.overlays,
+                {"autoZIndex": true, "collapsed": false, "position": "topright"}
+            ).addTo(map_b100fa63fd31b2d188028c1a978793d6);
+        
+</script>
+</html>
