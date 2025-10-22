@@ -8,17 +8,17 @@ The Austin 3D Terrain Generator is a full-stack Next.js application that transfo
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                        Frontend (React)                      │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐  │
-│  │ MapSelector  │  │CoordinateForm│  │  TerrainViewer   │  │
-│  │  (Leaflet)   │  │              │  │(React 3 Fiber)   │  │
-│  └──────────────┘  └──────────────┘  └──────────────────┘  │
+│                        Frontend (React)                     │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐   │
+│  │ MapSelector  │  │CoordinateForm│  │  TerrainViewer   │   │
+│  │  (Leaflet)   │  │              │  │(React 3 Fiber)   │   │
+│  └──────────────┘  └──────────────┘  └──────────────────┘   │
 └─────────────────────────────────────────────────────────────┘
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                  Next.js API Routes (Node.js)                │
-│              /api/generate-terrain (POST/GET)                │
+│                  Next.js API Routes (Node.js)               │
+│              /api/generate-terrain (POST/GET)               │
 └─────────────────────────────────────────────────────────────┘
                             │
             ┌───────────────┼───────────────┐
@@ -31,14 +31,14 @@ The Austin 3D Terrain Generator is a full-stack Next.js application that transfo
             └───────────────┼───────────────┘
                             ▼
                    ┌─────────────────┐
-                   │  File Generation │
-                   │  PNG/GLB/STL     │
+                   │ File Generation │
+                   │ PNG/GLB/STL     │
                    └─────────────────┘
                             │
                             ▼
                    ┌─────────────────┐
-                   │  /public/terrain │
-                   │  (Static Files)  │
+                   │ /public/terrain │
+                   │ (Static Files)  │
                    └─────────────────┘
 ```
 
@@ -89,11 +89,12 @@ fetchImageryFromWMS(bbox, width, height)
 
 **Step 2: Fetch Elevation Data**
 ```typescript
-// Currently placeholder - needs implementation
-fetchDEMTile(tileName)
+// lib/dataFetcher.ts
+fetchDEMData(bbox)
 ```
-- Identify required DEM tiles from S3
-- Download and mosaic tiles
+- Identify required DEM tiles from TNRIS S3
+- Download GeoTIFF tiles for the area
+- Mosaic tiles if area spans multiple tiles
 - Crop to bounding box
 - Returns: GeoTIFF ArrayBuffer
 
@@ -352,11 +353,12 @@ stratmap21_28cm_50cm_bexar_travis_3097_XXXXX_dem.tif
 - [ ] Progressive streaming of results
 
 ### Features
-- [ ] Real-time DEM tile index from S3
+- [x] Real-time DEM tile fetching from S3 ✅
 - [ ] Custom resolution selection
 - [ ] Vertical exaggeration control
 - [ ] Time-series comparison
 - [ ] Batch processing
+- [ ] Expanded DEM coverage beyond Travis County
 
 ### Infrastructure
 - [ ] Migrate to dedicated servers for heavy processing

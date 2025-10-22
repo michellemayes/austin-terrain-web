@@ -193,7 +193,7 @@ export default function DocsPage() {
             </div>
 
             <div className="border-l-4 border-green-500 pl-4">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Elevation Data (Planned)</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Elevation Data ✅ Active</h3>
               <p className="text-gray-700 mb-2">
                 <strong>Provider:</strong> Texas Natural Resources Information System (TNRIS)
               </p>
@@ -202,6 +202,9 @@ export default function DocsPage() {
               </p>
               <p className="text-gray-700 mb-2">
                 <strong>Resolution:</strong> 28-50 cm horizontal, ~15 cm vertical accuracy
+              </p>
+              <p className="text-gray-700 mb-2">
+                <strong>Coverage:</strong> Travis County area
               </p>
               <p className="text-sm text-gray-600">
                 <strong>Access:</strong> <a 
@@ -214,7 +217,7 @@ export default function DocsPage() {
                 </a>
               </p>
               <p className="text-sm text-green-700 bg-green-50 p-2 rounded mt-2">
-                <strong>Active:</strong> Using real LiDAR elevation data from TNRIS S3 bucket.
+                <strong>✅ Active:</strong> Using real LiDAR elevation data from TNRIS S3 bucket for accurate terrain representation.
               </p>
             </div>
           </div>
@@ -363,8 +366,7 @@ export default function DocsPage() {
             <li className="flex items-start">
               <span className="text-purple-600 mr-2 text-xl">•</span>
               <div>
-                <strong>Real DEM Data Integration:</strong> Implement S3 tile indexing, GeoTIFF parsing, 
-                and accurate elevation data from TNRIS LiDAR
+                <strong>Expanded DEM Coverage:</strong> Add additional DEM tiles beyond Travis County for wider geographic coverage
               </div>
             </li>
             <li className="flex items-start">

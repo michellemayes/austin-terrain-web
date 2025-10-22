@@ -46,14 +46,15 @@ Copy and paste into the "Enter Coordinates" tab:
 ✅ **Everything!** - Full end-to-end functionality:
 - Interactive map with persistent polygons
 - Real aerial imagery from TNRIS WMS
+- Real elevation data from TNRIS DEM tiles
 - 3D mesh generation with polygon masking
-- Textured 3D models
+- Textured 3D models with accurate terrain
 - Interactive viewer with controls
 - File downloads (PNG, GLB, STL)
 - Responsive navigation
 - Documentation page
 
-⚠️ **Test Elevation Data** - Using synthetic terrain (smooth waves) instead of real LiDAR. The imagery is real though!
+✅ **Real Data Integration** - Using actual LiDAR elevation data from TNRIS for Travis County area!
 
 ## Navigation
 

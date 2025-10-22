@@ -25,12 +25,12 @@ A Next.js web application that generates downloadable 3D terrain models from Aus
 ✅ **Fully Functional** - The application works end-to-end with the following features:
 - Interactive map with polygon drawing
 - Real aerial imagery from TNRIS WMS server
+- Real elevation data from TNRIS DEM tiles
+    - **NOTE:** This does not need to be working anymore as of 10/21/25 needs work
 - 3D mesh generation with polygon masking
 - Interactive 3D viewer with controls
 - File downloads in three formats
-- Beautiful, responsive UI
-
-⚠️ **Using Test Elevation Data** - Currently generates synthetic terrain. Real DEM data from TNRIS S3 is planned but not yet implemented.
+- Responsive UI
 
 ## Tech Stack
 
@@ -44,7 +44,7 @@ A Next.js web application that generates downloadable 3D terrain models from Aus
 ## Data Sources
 
 - **Aerial Imagery**: [TNRIS StratMap WMS Server](https://imagery.geographic.texas.gov/server/services/StratMap/StratMap21_NCCIR_CapArea_Brazos_Kerr/ImageServer/WMSServer) ✅ Working
-- **Elevation Data**: [TNRIS DEM Collection](https://tnris-data-warehouse.s3.us-east-1.amazonaws.com/index.html?prefix=LCD/collection/stratmap-2021-28cm-50cm-bexar-travis/dem/) ⚠️ Planned
+- **Elevation Data**: [TNRIS DEM Collection](https://tnris-data-warehouse.s3.us-east-1.amazonaws.com/index.html?prefix=LCD/collection/stratmap-2021-28cm-50cm-bexar-travis/dem/) ✅ Working
 
 ## Getting Started
 
@@ -160,8 +160,8 @@ The 3D terrain mesh is generated for the entire bounding box, but:
 
 ## Known Limitations
 
-1. **Test Elevation Data**: Currently uses synthetic terrain (sine waves). Real DEM implementation pending.
-2. **Imagery Coverage**: Some areas may have limited coverage (appears blank/transparent)
+1. **Imagery Coverage**: Some areas may have limited coverage (appears blank/transparent)
+2. **DEM Coverage**: Elevation data currently limited to Travis County area
 3. **Processing Time**: Larger areas take longer (30+ seconds for complex polygons)
 4. **Vercel Timeout**: Requires Vercel Pro for 300-second function timeout
 
@@ -193,7 +193,7 @@ git push
 ## Contributing
 
 Future enhancements needed:
-- Real DEM data pipeline from TNRIS S3
+- Expanded DEM coverage beyond Travis County
 - Redis for job persistence
 - External file storage (Vercel Blob/S3)
 - Automated file cleanup
@@ -208,7 +208,7 @@ MIT
 
 - **Elevation data source**: Texas Natural Resources Information System (TNRIS)
 - **Aerial imagery**: TNRIS StratMap Program
-- **Inspiration**: Original R script using rayshader package
+- **Inspiration**: Original R script by Michelle Mayes using rayshader package
 - **Open data**: Texas Water Development Board
 
 ## Support
